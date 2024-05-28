@@ -3,26 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>非公開發行公司股東會通知及過戶停止日期計算器</title>
+    <title>股東會通知及過戶停止日期計算器</title>
 </head>
 <body>
-    <h1>非公開股東會通知及過戶停止日期計算器</h1>
+    <h1>股東會通知及過戶停止日期計算器</h1>
+    
+    <label for="companyType">選擇公司類型:</label>
+    <select id="companyType">
+        <option value="nonPublic">非公開發行公司</option>
+        <option value="public">公開發行股票公司</option>
+    </select>
+    <br><br>
+    
     <label for="meetingType">選擇會議類型:</label>
     <select id="meetingType">
         <option value="regular">股東常會</option>
         <option value="special">股東臨時會</option>
     </select>
     <br><br>
-    <label for="meetingDate">本次股東會預計召開日期:</label>
+    
+    <label for="meetingDate">預計股東會召開日期:</label>
     <input type="date" id="meetingDate">
     <button onclick="calculateDates()">計算日期</button>
+    
     <p id="resultNotification"></p>
     <p id="resultStopTransfer"></p>
 
     <script>
         function calculateDates() {
-            const meetingDateInput = document.getElementById('meetingDate').value;
+            const companyType = document.getElementById('companyType').value;
             const meetingType = document.getElementById('meetingType').value;
+            const meetingDateInput = document.getElementById('meetingDate').value;
+            
             if (!meetingDateInput) {
                 document.getElementById('resultNotification').textContent = '請輸入股東會召開日期。';
                 document.getElementById('resultStopTransfer').textContent = '';
@@ -33,10 +45,18 @@
 
             // 計算最晚通知日期
             let notificationDate = new Date(meetingDate);
-            if (meetingType === 'regular') {
-                notificationDate.setDate(notificationDate.getDate() - 20);  // 往前推20天
-            } else if (meetingType === 'special') {
-                notificationDate.setDate(notificationDate.getDate() - 10);  // 往前推10天
+            if (companyType === 'nonPublic') {
+                if (meetingType === 'regular') {
+                    notificationDate.setDate(notificationDate.getDate() - 20);  // 非公開發行公司股東常會：往前推20天
+                } else if (meetingType === 'special') {
+                    notificationDate.setDate(notificationDate.getDate() - 10);  // 非公開發行公司股東臨時會：往前推10天
+                }
+            } else if (companyType === 'public') {
+                if (meetingType === 'regular') {
+                    notificationDate.setDate(notificationDate.getDate() - 30);  // 公開發行公司股東常會：往前推30天
+                } else if (meetingType === 'special') {
+                    notificationDate.setDate(notificationDate.getDate() - 15);  // 公開發行公司股東臨時會：往前推15天
+                }
             }
             notificationDate.setDate(notificationDate.getDate() - 1);  // 不算入起算日
 
@@ -47,10 +67,18 @@
 
             // 計算停止過戶期間的起始日期
             let stopTransferDate = new Date(meetingDate);
-            if (meetingType === 'regular') {
-                stopTransferDate.setDate(stopTransferDate.getDate() - 29);  // 往前推29天，包含開會日
-            } else if (meetingType === 'special') {
-                stopTransferDate.setDate(stopTransferDate.getDate() - 14);  // 往前推14天，包含開會日
+            if (companyType === 'nonPublic') {
+                if (meetingType === 'regular') {
+                    stopTransferDate.setDate(stopTransferDate.getDate() - 29);  // 非公開發行公司股東常會：往前推29天，包含開會日
+                } else if (meetingType === 'special') {
+                    stopTransferDate.setDate(stopTransferDate.getDate() - 14);  // 非公開發行公司股東臨時會：往前推14天，包含開會日
+                }
+            } else if (companyType === 'public') {
+                if (meetingType === 'regular') {
+                    stopTransferDate.setDate(stopTransferDate.getDate() - 59);  // 公開發行公司股東常會：往前推59天，包含開會日
+                } else if (meetingType === 'special') {
+                    stopTransferDate.setDate(stopTransferDate.getDate() - 29);  // 公開發行公司股東臨時會：往前推29天，包含開會日
+                }
             }
 
             const stopTransferYear = stopTransferDate.getFullYear();
