@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>股東會通知及過戶停止日期計算器</title>
+    <style>
+        .result {
+            color: blue;
+        }
+    </style>
 </head>
 <body>
     <h1>股東會通知及過戶停止日期計算器</h1>
@@ -26,8 +31,8 @@
     <input type="date" id="meetingDate" value="">
     <button onclick="calculateDates()">計算日期</button>
     
-    <p id="resultNotification"></p>
-    <p id="resultStopTransfer"></p>
+    <p id="resultNotification" class="result"></p>
+    <p id="resultStopTransfer" class="result"></p>
 
     <script>
         document.getElementById('meetingDate').valueAsDate = new Date();
